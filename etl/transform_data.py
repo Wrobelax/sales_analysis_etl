@@ -144,3 +144,42 @@ df["WeekDay"] = df["InvoiceDate"].dt.day_name()
 
 df["Weekend"] = (df["InvoiceDate"].dt.day_name()).isin(["Saturday", "Sunday"]).astype(int)
 
+df["Recency"] = pd.cut(
+    segmentation["Recency"],
+    bins = [0, 30, 90, float("inf")],
+    labels = ["Active", "Regular", "Inactive"],
+    include_lowest = True
+)
+
+df["Frequency"] = pd.cut(
+    segmentation["Frequency"],
+    bins = [0, 5, 9, float("inf")],
+    labels = ["Rare", "Medium", "Frequent"]
+)
+
+df["Monetary"] = pd.cut(
+    segmentation["Monetary"],
+    bins = [0, 500, 999, float("inf")],
+    labels = ["Low", "Medium", "High"]
+)
+
+
+# Segmentation.
+segments = {
+    "Top Clients" :   (df["Recency"] == "Active") & (df["Frequency"] == "Frequent") & (df["Monetary"] == "High"),
+    "Loyal Clients" : (df["Recency"] == "Active") & (df["Frequency"] == "Frequent") & (df["Monetary"] == "Medium"),
+    "Big Spenders" :  (df["Recency"] == "Regular") & (df["Monetary"] == "High"),
+    "New Clients" :   (df["Recency"] == "Active") & (df["Frequency"] == "Rare"),
+    "At Risk" :       (df["Recency"] == "Inactive") & (df["Frequency"] == "Frequent"),
+    "Lost Clients" :  (df["Recency"] == "Inactive") & (df["Frequency"] == "Low"),
+    "Low Value" :     (df["Frequency"] == "Rare") & (df["Monetary"] == "Low"),
+}
+
+df["ClientSegment"] = "Other"
+
+for segment_name, conditions in segments.items():
+    df.loc[conditions, "ClientSegment"] = segment_name
+
+
+
+"""Data transformations"""
