@@ -2,7 +2,6 @@
 
 # Importing required modules.
 import pandas as pd
-import numpy as np
 import sqlite3 as sql
 
 
@@ -12,7 +11,7 @@ import sqlite3 as sql
 try:
     conn = sql.connect("../data/e-commerce.db")
     sql_query = "SELECT * FROM orders_cleaned"
-    df_result = pd.read_sql(sql_query, conn)
+    df = pd.read_sql(sql_query, conn)
 except Exception as e:
     print(e)
 
@@ -101,9 +100,47 @@ top_10_clients = pd.read_sql_query(query, conn)
 # Total products sold per day.
 query = ("""SELECT 
                 DATE(InvoiceDate) AS OrderDate, 
-                SUM(Quantity) AS TotalQuantity,
+                SUM(Quantity) AS TotalQuantity
             FROM orders_cleaned 
             GROUP BY OrderDate
             ORDER BY OrderDate;""")
 total_sold_per_day = pd.read_sql_query(query, conn)
-print(total_sold_per_day)
+# print(total_sold_per_day)
+
+
+# Orders with missing CustomerID.
+query = ("""SELECT COUNT(Quantity) AS MissingCustomerId 
+            FROM orders_cleaned 
+            WHERE CustomerID IS NULL;""")
+empty_customer_id = pd.read_sql_query(query, conn)
+# print(empty_customer_id)
+
+
+# Client's segmentation - recency, frequency, monetary.
+query = ("""SELECT 
+                CustomerID,
+                CAST(
+                    julianday((SELECT MAX(InvoiceDate) FROM orders_cleaned)) - 
+                    julianday(MAX(InvoiceDate)) AS INTEGER) AS Recency,
+                COUNT(DISTINCT InvoiceNo) AS Frequency, 
+                SUM(UnitPrice * Quantity) AS Monetary
+            FROM orders_cleaned
+            WHERE CustomerID IS NOT NULL 
+            GROUP BY CustomerID 
+            ORDER BY Recency DESC;""")
+segmentation = pd.read_sql_query(query, conn)
+# print(segmentation)
+
+
+
+"""Adding new columns to the table"""
+df["OrderValue"] = df["UnitPrice"] * df["Quantity"]
+
+df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"], format = "mixed", dayfirst = True)
+
+df["Month"] = df["InvoiceDate"].dt.month
+
+df["WeekDay"] = df["InvoiceDate"].dt.day_name()
+
+df["Weekend"] = (df["InvoiceDate"].dt.day_name()).isin(["Saturday", "Sunday"]).astype(int)
+
