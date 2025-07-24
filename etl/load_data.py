@@ -24,7 +24,7 @@ result_df = pd.read_sql("SELECT * FROM orders LIMIT 10", conn)
 # Basic data exploration for cleaning.
 # print(result_df)
 # print(df.head())
-# print(df.info())
+# print(df.info()) # CustomerID is float.
 # print(df.isnull().sum()) # Description and CustomerID are missing data.
 # print(df.dtypes) # InvoiceDate change to date type.
 # print(df[df.duplicated()]) # 5268 rows of duplicates.
@@ -37,6 +37,10 @@ df["CustomerID"] = df["CustomerID"].replace("", np.nan)
 
 # Converting date.
 df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"], format = "mixed", dayfirst = True)
+
+
+# Changing CustomerID to int.
+df["CustomerID"] = df["CustomerID"].astype("Int64")
 
 
 # Dropping duplicates.
