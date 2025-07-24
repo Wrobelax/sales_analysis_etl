@@ -133,10 +133,19 @@ segmentation = pd.read_sql_query(query, conn)
 
 
 
-"""Adding new columns to the table"""
+"""Data transformations"""
+
+# Adding new columns to the table.
 df["OrderValue"] = df["UnitPrice"] * df["Quantity"]
 
 df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"], format = "mixed", dayfirst = True)
+
+df["Returned"] = df["Quantity"] < 0
+
+order_sizes = df.groupby("InvoiceNo")["Quantity"].sum()
+df["OrderSize"] = df["InvoiceNo"].map(order_sizes)
+
+df["Hour"] = df["InvoiceDate"].dt.hour
 
 df["Month"] = df["InvoiceDate"].dt.month
 
@@ -181,5 +190,22 @@ for segment_name, conditions in segments.items():
     df.loc[conditions, "ClientSegment"] = segment_name
 
 
+# Aggregation.
+month_trends = df.groupby("Month").agg({"OrderValue" : "sum"}).sort_index()
 
-"""Data transformations"""
+orders_per_client = df.groupby("CustomerID").agg({"OrderValue" : "sum"}).sort_values(by = "OrderValue", ascending = False)
+
+pivot_customer_month = df.pivot_table(index = "CustomerID", columns = "Month", values = "OrderValue", aggfunc = "sum")
+
+
+
+"""Exporting data"""
+# Saving results as a new table in SQL db and dropping connection.
+try:
+    df.to_sql("orders_transformed", conn, if_exists = "replace", index = False)
+    month_trends.to_sql("month_trends", conn, if_exists = "replace", index = False)
+    orders_per_client.to_sql("orders_per_client", conn, if_exists = "replace", index = False)
+    pivot_customer_month.to_sql("customer_month", conn, if_exists = "replace", index = False)
+    conn.close()
+except Exception as e:
+    print(e)
