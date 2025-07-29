@@ -49,10 +49,13 @@ print(df_orders_clients.info())
 
 """Data Visualization"""
 # Monthly orders.
+data = df_pivot.sum(axis = 0)
+normalize = plt.Normalize(data.min(), data.max())
+colors = cm.viridis(normalize(data.values))
 
-
-df_pivot.sum(axis = 0)
-plt.title("Sum of monthly orders per month")
+plt.figure(figsize = (10,6))
+plt.bar(data.index, data.values, color = colors)
+plt.title("Sum of monthly orders")
 plt.xlabel("Month")
 plt.ylabel("Orders")
 plt.tight_layout()
