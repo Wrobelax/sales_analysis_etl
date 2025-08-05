@@ -4,7 +4,7 @@
 
 
 ## **Project description**
-This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommerce-data. It includes data cleaning, tranformation and visualization. The dataset was transformed into SQL database (sqlite).
+This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommerce-data. It includes data cleaning, transformation and visualization. The dataset was transformed into SQL database (sqlite).
 
 
 ## **Features**
@@ -45,13 +45,25 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
   * /**top_products.png**
 * /**.gitattributes**
 * /**README.md:** Main documentation of the project.
+---
 
+## **How to Run**
 
+1. Clone the repository  
+2. Install dependencies (e.g. pandas, matplotlib, seaborn)  
+3. Run ETL scripts in the `etl` folder:
+```bash
+python etl/load_data.py
+python etl/transform_data.py
+python etl/sales_insights.py
+```
+
+---
 ## **Data description & Visualization**
 ### Orders Per Country
 * **File:** "orders_per_country.png"
-* **Description:** Pie chart visualizing countries participation percentage in sales.
-* **Conclusion:** United Kingdom dominates in orders holding over 85% of them in top 10 and almost 85% in total.
+* **Description:** Pie chart visualizing countries percentage share of sales.
+* **Conclusion:** United Kingdom dominates in orders holding over 85% of them in top 10 and accounts for nearly 85% of all orders.
 
 ![orders_per_country.png](outputs/orders_per_country.png)
 ![orders_per_country_uk_rest.png](outputs/orders_per_country_uk_rest.png)
@@ -62,7 +74,7 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 ### Sale Per Month
 * **File:** "sale_per_month.png"
 * **Description:** Bar chart showing sum of sales per month.
-* **Conclusion:** Highest sale occurs in November and drops to the lowest in december. This might be counterintuitive to the fact that winter christmas usually notes spike in sales.
+* **Conclusion:** Highest sale occurs in November and drops to the lowest in december. This might be counterintuitive to the fact that holiday season usually notes spike in sales.
 
 ![sale_per_month.png](outputs/sale_per_month.png)
 
@@ -72,21 +84,9 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 ### Top 10 Sold products
 * **File:** "top_products.png"
 * **Description:** Horizontal bar chart visualizing top sold products per quantity.
-* **Conclusion:** "World War II Gliders Asstd Designs" were sold at the most number. Second most sold product had slightly less sold amounts.
+* **Conclusion:** "World War II Gliders Asstd Designs" were sold in the highest quantity. Second most sold product had slightly less sold amounts.
 
 ![top_products.png](outputs/top_products.png)
-
-
----
-
-### Cross-Validation Results
-* **File:** "cross_val_lin.png"
-* **Description:** Shows 10-fold cross-validation scores for both models.
-* **Conclusion:** Performance is very similar. Logistic Regression may be preferred due to its simplicity.
-
-![cross_val_lin.png](data/cross_val_lin.png)
-
-
 ---
 
 ### Orders Per Week
@@ -96,9 +96,8 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 
 
 ![orders_weekly.png](outputs/orders_weekly.png)
-
-
 ---
+
 
 ### Hourly Activity
 * **File:** "orders_by_hour.png"
@@ -106,9 +105,8 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 * **Conclusion:** Customers were the most active between 12-15.
 
 * ![orders_by_hour.png](outputs/orders_by_hour.png)
-
-
 ---
+
 
 ### Clients Segments
 * **File:** "segments.png"
@@ -118,13 +116,13 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 * ![segments.png](outputs/segments.png)
 ---
 
+
 ### Distribution of Order Value
 * **File:** "order_value_distribution.png"
 * **Description:** Histogram with order value distribution.
-* **Conclusion:** Low cost products holds the greatest number of orders. Some negative values suggest returned orders.
+* **Conclusion:** Low-cost products hold the greatest number of orders. Some negative values suggest returned orders.
 
 * ![order_value_distribution.png](outputs/order_value_distribution.png)
-
 ---
 
 
@@ -136,8 +134,7 @@ This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommer
 * ![top_10_clients.png](outputs/top_10_clients.png)
 ---
 
+
 ## Final Thoughts
-This project demonstrates the full workflow of an ETL process:
-* Data clearance and transformation into SQL database.
-* Data manipulation.
-* Data visualization.
+This project improved my understanding of the ETL process, data cleaning in Pandas, and how to combine SQL databases with Python for analytics purposes.
+I also practiced visual storytelling using Matplotlib and Seaborn, and identified patterns in e-commerce sales such as customer activity peaks and sales seasonality.
