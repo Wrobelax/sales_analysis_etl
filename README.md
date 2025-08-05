@@ -4,7 +4,7 @@
 
 
 ## **Project description**
-This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommerce-data. It includes data cleaning, transformation and visualization. The dataset was transformed into SQL database (sqlite).
+This project uses open data from https://www.kaggle.com/datasets/carrie1/ecommerce-data. It covers data cleaning, transformation and visualization. The dataset was transformed into SQL database (sqlite).
 
 
 ## **Features**
@@ -81,7 +81,7 @@ python etl/sales_insights.py
 
 ---
 
-### Top 10 Sold products
+### Top 10 Sold Products
 * **File:** "top_products.png"
 * **Description:** Horizontal bar chart visualizing top sold products per quantity.
 * **Conclusion:** "World War II Gliders Asstd Designs" were sold in the highest quantity. Second most sold product had slightly less sold amounts.
