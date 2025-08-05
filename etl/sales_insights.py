@@ -163,7 +163,7 @@ plt.xticks(rotation = 45)
 
 plt.tight_layout()
 plt.grid(True)
-plt.savefig("../outputs/orders_daily.png")
+plt.savefig("../outputs/orders_weekly.png")
 
 
 
